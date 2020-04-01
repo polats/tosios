@@ -29,6 +29,6 @@ jobs:
       - name: Release in Heroku
         uses: sjdonado/heroku@master
         with:
-          args: container:release -a tosios-demo web
+          args: container:release -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
