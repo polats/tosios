@@ -23,6 +23,9 @@ const GameModesList: IListItem[] = Constants.GAME_MODES.map(value => ({
   title: value,
 }));
 
+const ALLOW_NAME_CHANGE = false;
+const ENABLE_WEB3_LOGIN = true;
+
 interface IProps extends RouteComponentProps {
 }
 
@@ -83,6 +86,10 @@ export default class Home extends Component<IProps, IState> {
 
 
   // HANDLERS
+  handleWeb3Login = () => {
+    console.log("SDF")
+  }
+
   handlePlayerNameChange = (event: any) => {
     this.setState({
       playerName: event.target.value,
@@ -192,15 +199,30 @@ export default class Home extends Component<IProps, IState> {
         <View flex={true}>
           <img src={playerImage} alt="player" width={30} />
           <Inline size="thin" />
-          <p>Pick your name:</p>
+          <p>Guest Account</p>
         </View>
         <Space size="xs" />
-        <Input
-          value={this.state.playerName}
-          placeholder="Name"
-          maxLength={Constants.PLAYER_NAME_MAX}
-          onChange={this.handlePlayerNameChange}
-        />
+
+        {ALLOW_NAME_CHANGE && (
+          <Input
+            value={this.state.playerName}
+            placeholder="Name"
+            maxLength={Constants.PLAYER_NAME_MAX}
+            onChange={this.handlePlayerNameChange}
+          />
+        )}
+
+        {ENABLE_WEB3_LOGIN && (
+          <Fragment>
+            <Space size="xs" />
+            <Button
+              title="Login"
+              onClick={this.handleWeb3Login}
+              text={'Login'}
+            />
+          </Fragment>
+        )}
+
         {this.state.hasNameChanged && (
           <Fragment>
             <Space size="xs" />

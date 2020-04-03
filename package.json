@@ -16,9 +16,9 @@
     ]
   },
   "scripts": {
-    "clean:dependencies": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +",
-    "clean:builds": "find . -name \"build\" -type d -prune -exec rm -rf '{}' +",
-    "clean": "yarn clean:dependencies; yarn clean:builds",
+    "clean:dependencies": "rimraf ./**/node_modules",
+    "clean:builds": "rimraf ./**/build",
+    "clean": "concurrently --kill-others-on-fail \"yarn clean:dependencies\" \"yarn clean:builds\"",
     "lint": "yarn workspace @tosios/client lint; yarn workspace @tosios/server lint",
     "lint:fix": "yarn workspace @tosios/client lint:fix; yarn workspace @tosios/server lint:fix",
     "start:common": "yarn workspace @tosios/common start",
@@ -37,6 +37,7 @@
     "tslint": "^5.19.0"
   },
   "devDependencies": {
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "rimraf": "^2.6.2"
   }
 }
