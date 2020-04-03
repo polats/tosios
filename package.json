@@ -30,7 +30,8 @@
     "build:server": "yarn workspace @tosios/server build",
     "build:move": "mv ./packages/client/build ./packages/server/build/public",
     "build": "yarn build:common && yarn build:client && yarn build:server && yarn build:move",
-    "serve": "yarn workspace @tosios/server serve"
+    "serve": "yarn workspace @tosios/server serve",
+    "postinstall": "rimraf node_modules/@types/react-native"
   },
   "dependencies": {
     "concurrently": "^4.1.1",
