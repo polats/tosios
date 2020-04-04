@@ -1,10 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { createGlobalStyle } from "styled-components";
+
+import App from "./App";
+
 import './index.css';
+import { globalStyle } from "./styles";
+
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const GlobalStyle = createGlobalStyle`
+  ${globalStyle}
+`;
+
+declare global {
+  // tslint:disable-next-line
+  interface Window {
+    blockies: any;
+  }
+}
+
+ReactDOM.render(
+  <>
+    {false && <GlobalStyle />}
+    <App />
+  </>,
+  document.getElementById("root"),
+);
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-// import Blockie from "./Blockie";
+import Blockie from "./Blockie";
 import { ellipseAddress, getChainData } from "../helpers/utilities";
 import { fonts, responsive, transitions } from "../styles";
 
@@ -50,11 +50,9 @@ const SAddress = styled.p<IHeaderStyle>`
   margin: ${({ connected }) => (connected ? "-2px auto 0.7em" : "0")};
 `;
 
-/*
 const SBlockie = styled(Blockie)`
   margin-right: 10px;
 `;
-*/
 
 const SDisconnect = styled.div<IHeaderStyle>`
   transition: ${transitions.button};
@@ -96,9 +94,7 @@ const Header = (props: IHeaderProps) => {
       )}
       {address && (
         <SActiveAccount>
-          {
-            // <SBlockie address={address} />
-          }
+          <SBlockie address={address} />
           <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
           <SDisconnect connected={connected} onClick={killSession}>
             {"Disconnect"}
