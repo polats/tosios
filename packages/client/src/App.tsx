@@ -1,16 +1,37 @@
 import { Router } from '@reach/router';
 import React, { Component } from 'react';
+import styled from "styled-components";
+import { fonts } from "./styles";
+
 import WalletConnect from "@walletconnect/browser";
+import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
 
 import { getAccounts, initWallet, updateWallet } from "./helpers/wallet";
 import { DEFAULT_CHAIN_ID, DEFAULT_ACTIVE_INDEX } from "./helpers/constants";
 import { getCachedSession } from "./helpers/utilities";
 import appConfig from "./config";
 
+import { IAssetData } from "./helpers/types";
+
 import Header from "./components/Header";
+import Column from "./components/Column";
+import WCButton from "./components/WCButton";
 
 import Game from './scenes/Game';
 import Home from './scenes/Home';
+
+const SButtonContainer = styled(Column)`
+  width: 250px;
+  margin: 50px 0;
+`;
+
+const SConnectButton = styled(WCButton)`
+  border-radius: 8px;
+  font-size: ${fonts.size.medium};
+  height: 44px;
+  width: 100%;
+  margin: 12px 0;
+`;
 
 export interface IAppState {
   loading: boolean;
@@ -32,7 +53,14 @@ export interface IAppState {
   requests: any[];
   results: any[];
   payload: any;
+
+  fetching: boolean;
+  showModal: boolean;
+  pendingRequest: boolean;
+  result: any | null;
+  assets: IAssetData[];
 }
+
 
 const DEFAULT_ACCOUNTS = getAccounts();
 const DEFAULT_ADDRESS = DEFAULT_ACCOUNTS[DEFAULT_ACTIVE_INDEX];
@@ -57,6 +85,12 @@ const INITIAL_STATE: IAppState = {
   requests: [],
   results: [],
   payload: null,
+
+  fetching: false,
+  showModal: false,
+  pendingRequest: false,
+  result: null,
+  assets: [],
 };
 
 class App extends React.Component<{}> {
@@ -122,6 +156,37 @@ class App extends React.Component<{}> {
   };
 
   public bindedSetState = (newState: Partial<IAppState>) => this.setState(newState);
+
+
+  public walletConnectInit = async () => {
+    // bridge url
+    const bridge = "https://bridge.walletconnect.org";
+
+    // create new connector
+    const connector = new WalletConnect({ bridge });
+
+    await this.setState({ connector });
+
+    // check if already connected
+    if (!connector.connected) {
+      // create new session
+      await connector.createSession();
+
+      // get uri for QR Code modal
+      const uri = connector.uri;
+
+      // console log the uri for development
+      console.log(uri);
+
+      // display QR Code modal
+      WalletConnectQRCodeModal.open(uri, () => {
+        console.log("QR Code Modal closed");
+      });
+    }
+    // subscribe to events
+    await this.subscribeToEvents();
+  };
+
 
   public subscribeToEvents = () => {
     console.log("[subscribeToEvents]");
@@ -205,6 +270,11 @@ class App extends React.Component<{}> {
       chainId,
       requests,
       payload,
+      assets,
+      fetching,
+      showModal,
+      pendingRequest,
+      result,
     } = this.state;
 
     return (
@@ -215,6 +285,13 @@ class App extends React.Component<{}> {
           chainId={chainId}
           killSession={this.killSession}
         />
+
+        <SButtonContainer>
+          <SConnectButton left onClick={this.walletConnectInit} fetching={fetching}>
+            {"Connect to WalletConnect"}
+          </SConnectButton>
+        </SButtonContainer>
+
         <Router>
           <Home
             default={true}

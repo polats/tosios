@@ -3,10 +3,8 @@ import * as ReactDOM from "react-dom";
 import { createGlobalStyle } from "styled-components";
 
 import App from "./App";
-
-import './index.css';
 import { globalStyle } from "./styles";
-
+// import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 const GlobalStyle = createGlobalStyle`
@@ -22,7 +20,7 @@ declare global {
 
 ReactDOM.render(
   <>
-    {false && <GlobalStyle />}
+    <GlobalStyle />
     <App />
   </>,
   document.getElementById("root"),

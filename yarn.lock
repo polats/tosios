@@ -1867,6 +1867,14 @@
     "@walletconnect/types" "^1.0.0-beta.47"
     "@walletconnect/utils" "^1.0.0-beta.47"
 
+"@walletconnect/qrcode-modal@^1.0.0-beta.47":
+  version "1.0.0-beta.47"
+  resolved "https://registry.yarnpkg.com/@walletconnect/qrcode-modal/-/qrcode-modal-1.0.0-beta.47.tgz#42dc580c0542db2f468a479b6a0bdc93ced6cc05"
+  integrity sha512-FV3FDbbYeRsTarwWUq4pxjPNsmfZT5f+t8TIH1Uva23fiEG3PcjfWwXuGmoh4vADbtGx8ctO7hSs1Doegtd8KA==
+  dependencies:
+    qr-image "3.2.0"
+    qrcode-terminal "0.12.0"
+
 "@walletconnect/types@^1.0.0-beta.47":
   version "1.0.0-beta.47"
   resolved "https://registry.yarnpkg.com/@walletconnect/types/-/types-1.0.0-beta.47.tgz#d790b33902629e05d7e18f6cbb6774c4a2f0619f"
@@ -8352,6 +8360,16 @@ punycode@^2.1.0, punycode@^2.1.1:
 q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
+
+qr-image@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/qr-image/-/qr-image-3.2.0.tgz#9fa8295beae50c4a149cf9f909a1db464a8672e8"
+  integrity sha1-n6gpW+rlDEoUnPn5CaHbRkqGcug=
+
+qrcode-terminal@0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/qrcode-terminal/-/qrcode-terminal-0.12.0.tgz#bb5b699ef7f9f0505092a3748be4464fe71b5819"
+  integrity sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==
 
 qs@6.7.0:
   version "6.7.0"

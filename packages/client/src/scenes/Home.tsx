@@ -199,7 +199,7 @@ export default class Home extends Component<IProps, IState> {
         <View flex={true}>
           <img src={playerImage} alt="player" width={30} />
           <Inline size="thin" />
-          <p>Guest Account</p>
+          <h4>Guest Account</h4>
         </View>
         <Space size="xs" />
 
