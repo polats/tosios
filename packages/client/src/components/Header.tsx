@@ -59,7 +59,7 @@ const SAddress = styled.p<IHeaderStyle>`
   margin: ${({ connected }) => (connected ? "-2px auto 0.7em" : "0")};
 `;
 
-const SDisconnect = styled.div<IHeaderStyle>`
+const SSession = styled.div<IHeaderStyle>`
   transition: ${transitions.button};
   font-size: 12px;
   font-family: monospace;
@@ -69,25 +69,34 @@ const SDisconnect = styled.div<IHeaderStyle>`
   opacity: 0.7;
   cursor: pointer;
 
-  opacity: ${({ connected }) => (connected ? 1 : 0)};
-  visibility: ${({ connected }) => (connected ? "visible" : "hidden")};
-  pointer-events: ${({ connected }) => (connected ? "auto" : "none")};
-
   &:hover {
     transform: translateY(-1px);
     opacity: 0.5;
   }
 `;
 
+const SDisconnect = styled(SSession)`
+    opacity: ${({ connected }) => (connected ? 1 : 0)};
+    visibility: ${({ connected }) => (connected ? "visible" : "hidden")};
+    pointer-events: ${({ connected }) => (connected ? "auto" : "none")};
+`;
+
+const SConnect = styled(SSession)`
+    opacssity: ${({ connected }) => (!connected ? 1 : 0)};
+    visibility: ${({ connected }) => (!connected ? "visible" : "hidden")};
+    pointer-events: ${({ connected }) => (!connected ? "auto" : "none")};
+`;
+
 interface IHeaderProps {
   killSession: () => void;
+  connectSession: () => void;
   connected: boolean;
   address: string;
   chainId: number;
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession } = props;
+  const { connected, address, chainId, killSession, connectSession } = props;
   const activeChain = chainId ? getChainData(chainId).name : null;
   return (
     <SHeader {...props}>
@@ -97,9 +106,12 @@ const Header = (props: IHeaderProps) => {
           <p>{activeChain}</p>
         </SActiveChain>
       ) : (
-        <SBanner />
+        <SActiveChain>
+          <p>{`Guest Account`}</p>
+        </SActiveChain>
       )}
-      {address && (
+
+      {address ? (
         <SActiveAccount>
           <SBlockie address={address} />
           <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
@@ -107,6 +119,10 @@ const Header = (props: IHeaderProps) => {
             {"Disconnect"}
           </SDisconnect>
         </SActiveAccount>
+      ) : (
+        <SConnect connected={connected} onClick={connectSession}>
+          {"Login with WalletConnect"}
+        </SConnect>
       )}
     </SHeader>
   );
@@ -114,6 +130,7 @@ const Header = (props: IHeaderProps) => {
 
 Header.propTypes = {
   killSession: PropTypes.func.isRequired,
+  connectSession: PropTypes.func.isRequired,
   address: PropTypes.string,
 };
 

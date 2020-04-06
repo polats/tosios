@@ -307,17 +307,12 @@ class App extends React.Component<{}> {
     return (
       <>
         <View flex={true} center={true} column={true}>
-          {!address && !assets.length ?
-            <SConnectButton left onClick={this.walletConnectInit} fetching={fetching}>
-              {"Connect to WalletConnect"}
-            </SConnectButton>
-            :
             <Header
               connected={connected}
               address={address}
               chainId={chainId}
-              killSession={this.killSession}/>
-          }
+              killSession={this.killSession}
+              connectSession={this.walletConnectInit}/>
         </View>
         <Router>
           <Home
