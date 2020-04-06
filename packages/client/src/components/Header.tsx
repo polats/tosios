@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
-
+import * as PropTypes from "prop-types";
 import Blockie from "./Blockie";
 import { ellipseAddress, getChainData } from "../helpers/utilities";
-import { fonts, responsive, transitions } from "../styles";
+import { transitions } from "../styles";
 
 const SHeader = styled.div`
   margin-top: -1px;
@@ -14,9 +14,6 @@ const SHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  @media screen and (${responsive.sm.max}) {
-    font-size: ${fonts.size.small};
-  }
 `;
 
 const SActiveAccount = styled.div`
@@ -40,6 +37,18 @@ const SActiveChain = styled(SActiveAccount)`
   }
 `;
 
+const SBlockie = styled(Blockie)`
+  margin-right: 10px;
+`;
+
+const SBanner = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-weight: 500;
+`;
+
+
 interface IHeaderStyle {
   connected: boolean;
 }
@@ -48,10 +57,6 @@ const SAddress = styled.p<IHeaderStyle>`
   transition: ${transitions.base};
   font-weight: bold;
   margin: ${({ connected }) => (connected ? "-2px auto 0.7em" : "0")};
-`;
-
-const SBlockie = styled(Blockie)`
-  margin-right: 10px;
 `;
 
 const SDisconnect = styled.div<IHeaderStyle>`
@@ -86,11 +91,13 @@ const Header = (props: IHeaderProps) => {
   const activeChain = chainId ? getChainData(chainId).name : null;
   return (
     <SHeader {...props}>
-      {activeChain && (
+      {connected && activeChain ? (
         <SActiveChain>
           <p>{`Connected to`}</p>
           <p>{activeChain}</p>
         </SActiveChain>
+      ) : (
+        <SBanner />
       )}
       {address && (
         <SActiveAccount>
@@ -103,6 +110,11 @@ const Header = (props: IHeaderProps) => {
       )}
     </SHeader>
   );
+};
+
+Header.propTypes = {
+  killSession: PropTypes.func.isRequired,
+  address: PropTypes.string,
 };
 
 export default Header;

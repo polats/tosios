@@ -2,11 +2,14 @@ import { Router } from '@reach/router';
 import React, { Component } from 'react';
 import styled from "styled-components";
 import { fonts } from "./styles";
-
+import { View } from './components';
 import WalletConnect from "@walletconnect/browser";
 import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
+import { IInternalEvent } from "@walletconnect/types";
 
 import { getAccounts, initWallet, updateWallet } from "./helpers/wallet";
+import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
+
 import { DEFAULT_CHAIN_ID, DEFAULT_ACTIVE_INDEX } from "./helpers/constants";
 import { getCachedSession } from "./helpers/utilities";
 import appConfig from "./config";
@@ -19,6 +22,9 @@ import WCButton from "./components/WCButton";
 
 import Game from './scenes/Game';
 import Home from './scenes/Home';
+
+// app settings
+const CREATE_WALLET_ON_GUEST_ACCOUNT = false;
 
 const SButtonContainer = styled(Column)`
   width: 250px;
@@ -61,9 +67,10 @@ export interface IAppState {
   assets: IAssetData[];
 }
 
-
-const DEFAULT_ACCOUNTS = getAccounts();
-const DEFAULT_ADDRESS = DEFAULT_ACCOUNTS[DEFAULT_ACTIVE_INDEX];
+const DEFAULT_ACCOUNTS = CREATE_WALLET_ON_GUEST_ACCOUNT
+  ? getAccounts() : [];
+const DEFAULT_ADDRESS = CREATE_WALLET_ON_GUEST_ACCOUNT
+  ? DEFAULT_ACCOUNTS[DEFAULT_ACTIVE_INDEX] : "";
 
 const INITIAL_STATE: IAppState = {
   loading: false,
@@ -104,12 +111,14 @@ class App extends React.Component<{}> {
   }
 
   public componentDidMount() {
-    this.initWallet();
+    if (CREATE_WALLET_ON_GUEST_ACCOUNT)
+      this.initWallet();
   }
 
   public resetApp = async () => {
     await this.setState({ ...INITIAL_STATE });
-    this.initWallet();
+    if (CREATE_WALLET_ON_GUEST_ACCOUNT)
+      this.initWallet();
   };
 
   public killSession = () => {
@@ -187,75 +196,93 @@ class App extends React.Component<{}> {
     await this.subscribeToEvents();
   };
 
-
   public subscribeToEvents = () => {
-    console.log("[subscribeToEvents]");
     const { connector } = this.state;
 
-    if (connector) {
-      connector.on("session_request", (error, payload) => {
-        console.log(`connector.on("session_request")`);
+    if (!connector) {
+      return;
+    }
 
-        if (error) {
-          throw error;
-        }
+    connector.on("session_update", async (error, payload) => {
+      console.log(`connector.on("session_update")`);
 
-        const { peerMeta } = payload.params[0];
-        this.setState({ peerMeta });
-      });
-
-      connector.on("session_update", error => {
-        console.log(`connector.on("session_update")`);
-
-        if (error) {
-          throw error;
-        }
-      });
-
-      connector.on("call_request", async (error, payload) => {
-        // tslint:disable-next-line
-        console.log(`connector.on("call_request")`, "payload.method", payload.method);
-
-        if (error) {
-          throw error;
-        }
-
-        await appConfig.rpcEngine.router(payload, this.state, this.bindedSetState);
-      });
-
-      connector.on("connect", (error, payload) => {
-        console.log(`connector.on("connect")`);
-
-        if (error) {
-          throw error;
-        }
-
-        this.setState({ connected: true });
-      });
-
-      connector.on("disconnect", (error, payload) => {
-        console.log(`connector.on("disconnect")`);
-
-        if (error) {
-          throw error;
-        }
-
-        this.resetApp();
-      });
-
-      if (connector.connected) {
-        const { chainId, accounts } = connector;
-        const index = 0;
-        const address = accounts[index];
-        updateWallet(index, chainId);
-        this.setState({
-          connected: true,
-          address,
-          chainId,
-        });
+      if (error) {
+        throw error;
       }
 
-      this.setState({ connector });
+      const { chainId, accounts } = payload.params[0];
+      this.onSessionUpdate(accounts, chainId);
+    });
+
+    connector.on("connect", (error, payload) => {
+      console.log(`connector.on("connect")`);
+
+      if (error) {
+        throw error;
+      }
+
+      this.onConnect(payload);
+    });
+
+    connector.on("disconnect", (error, payload) => {
+      console.log(`connector.on("disconnect")`);
+
+      if (error) {
+        throw error;
+      }
+
+      this.onDisconnect();
+    });
+
+    if (connector.connected) {
+      const { chainId, accounts } = connector;
+      const address = accounts[0];
+      this.setState({
+        connected: true,
+        chainId,
+        accounts,
+        address,
+      });
+    }
+
+    this.setState({ connector });
+  };
+
+  public onConnect = async (payload: IInternalEvent) => {
+    const { chainId, accounts } = payload.params[0];
+    const address = accounts[0];
+    await this.setState({
+      connected: true,
+      chainId,
+      accounts,
+      address,
+    });
+    WalletConnectQRCodeModal.close();
+    this.getAccountAssets();
+  };
+
+  public onDisconnect = async () => {
+    WalletConnectQRCodeModal.close();
+    this.resetApp();
+  };
+
+  public onSessionUpdate = async (accounts: string[], chainId: number) => {
+    const address = accounts[0];
+    await this.setState({ chainId, accounts, address });
+    await this.getAccountAssets();
+  };
+
+  public getAccountAssets = async () => {
+    const { address, chainId } = this.state;
+    this.setState({ fetching: true });
+    try {
+      // get account balances
+      const assets = await apiGetAccountAssets(address, chainId);
+
+      await this.setState({ fetching: false, address, assets });
+    } catch (error) {
+      console.error(error);
+      await this.setState({ fetching: false });
     }
   };
 
@@ -279,19 +306,19 @@ class App extends React.Component<{}> {
 
     return (
       <>
-        <Header
-          connected={connected}
-          address={address}
-          chainId={chainId}
-          killSession={this.killSession}
-        />
-
-        <SButtonContainer>
-          <SConnectButton left onClick={this.walletConnectInit} fetching={fetching}>
-            {"Connect to WalletConnect"}
-          </SConnectButton>
-        </SButtonContainer>
-
+        <View flex={true} center={true} column={true}>
+          {!address && !assets.length ?
+            <SConnectButton left onClick={this.walletConnectInit} fetching={fetching}>
+              {"Connect to WalletConnect"}
+            </SConnectButton>
+            :
+            <Header
+              connected={connected}
+              address={address}
+              chainId={chainId}
+              killSession={this.killSession}/>
+          }
+        </View>
         <Router>
           <Home
             default={true}

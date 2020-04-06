@@ -150,7 +150,6 @@ export const globalStyle = `
     font-size: ${fonts.size.h3}
   }
   h4 {
-    color: rgb(${colors.black})
     font-size: ${fonts.size.h4}
   }
   h5 {

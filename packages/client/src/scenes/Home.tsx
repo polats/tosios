@@ -8,6 +8,17 @@ import { Helmet } from 'react-helmet';
 import { Box, Button, GitHub, IListItem, Inline, Input, Room, Select, Separator, Space, View } from '../components';
 import playerImage from '../images/textures/player/player-idle-2.png';
 
+import styled from "styled-components";
+import { colors } from "../styles";
+
+const SAccountName = styled.div`
+  margin: 1em 0;
+  color: rgb(${colors.black});
+  t-size: 20px;
+  font-weight: 700;
+`;
+
+
 const MapsList: IListItem[] = Constants.MAPS_NAMES.map(value => ({
   value,
   title: value,
@@ -199,7 +210,7 @@ export default class Home extends Component<IProps, IState> {
         <View flex={true}>
           <img src={playerImage} alt="player" width={30} />
           <Inline size="thin" />
-          <h4>Guest Account</h4>
+          <SAccountName>Guest Account</SAccountName>
         </View>
         <Space size="xs" />
 
