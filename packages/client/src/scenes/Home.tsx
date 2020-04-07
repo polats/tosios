@@ -192,7 +192,9 @@ export default class Home extends Component<IProps, IState> {
         </View>
 
         <Space size="m" />
-        {this.renderName()}
+        {
+          // this.renderName()
+        }
         <Space size="m" />
         {this.renderRoom()}
       </View>

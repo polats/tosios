@@ -63,9 +63,6 @@ const SSession = styled.div<IHeaderStyle>`
   transition: ${transitions.button};
   font-size: 12px;
   font-family: monospace;
-  position: absolute;
-  right: 0;
-  top: 20px;
   opacity: 0.7;
   cursor: pointer;
 
@@ -76,13 +73,16 @@ const SSession = styled.div<IHeaderStyle>`
 `;
 
 const SDisconnect = styled(SSession)`
+    position: absolute;
+    right: 0;
+    top: 20px;
     opacity: ${({ connected }) => (connected ? 1 : 0)};
     visibility: ${({ connected }) => (connected ? "visible" : "hidden")};
     pointer-events: ${({ connected }) => (connected ? "auto" : "none")};
 `;
 
 const SConnect = styled(SSession)`
-    opacssity: ${({ connected }) => (!connected ? 1 : 0)};
+    opacity: ${({ connected }) => (!connected ? 1 : 0)};
     visibility: ${({ connected }) => (!connected ? "visible" : "hidden")};
     pointer-events: ${({ connected }) => (!connected ? "auto" : "none")};
 `;
@@ -111,19 +111,20 @@ const Header = (props: IHeaderProps) => {
         </SActiveChain>
       )}
 
-      {address ? (
-        <SActiveAccount>
-          <SBlockie address={address} />
-          <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
-          <SDisconnect connected={connected} onClick={killSession}>
-            {"Disconnect"}
-          </SDisconnect>
-        </SActiveAccount>
-      ) : (
-        <SConnect connected={connected} onClick={connectSession}>
-          {"Login with WalletConnect"}
-        </SConnect>
-      )}
+          {address ? (
+            <SActiveAccount>
+                <SBlockie address={address} />
+                <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
+                <SDisconnect connected={connected} onClick={killSession}>
+                  {"Disconnect"}
+                </SDisconnect>
+            </SActiveAccount>
+          ) : (
+            <SConnect connected={connected} onClick={connectSession}>
+              {"Login with WalletConnect"}
+            </SConnect>
+          )}
+
     </SHeader>
   );
 };
