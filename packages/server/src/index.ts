@@ -1,5 +1,5 @@
 import { monitor } from '@colyseus/monitor';
-import { Constants } from '@tosios/common';
+import { Constants , Database } from '@tosios/common';
 import { Server } from 'colyseus';
 import * as cors from 'cors';
 import * as express from 'express';
@@ -19,6 +19,10 @@ const server = new Server({
   server: createServer(app),
   express: app,
 });
+
+// database
+const db = new Database.OrbitDBManager();
+console.log(db);
 
 // Game Rooms
 server.define(Constants.ROOM_NAME, GameRoom);
@@ -40,5 +44,3 @@ server.onShutdown(() => {
 
 server.listen(PORT);
 console.log(`Listening on ws://localhost:${PORT}`);
-
-

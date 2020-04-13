@@ -31,7 +31,7 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-helmet": "^5.0.14",
-  "@types/styled-components": "4.1.8",
+    "@types/styled-components": "4.1.8",
     "tslint-react": "^4.1.0",
     "typescript": "^3.7.4"
   },

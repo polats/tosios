@@ -5,6 +5,8 @@
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "dependencies": {
+    "ipfs": "^0.42.1",
+    "orbit-db": "^0.23.1",
     "rbush": "^3.0.1",
     "react": "^16.12.0"
   },

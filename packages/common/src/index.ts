@@ -8,6 +8,7 @@ import * as Maths from './maths';
 import * as Sorts from './sort';
 import * as Tiled from './tiled';
 import * as Types from './types';
+import * as Database from './database';
 
 export {
   Collisions,
@@ -15,9 +16,10 @@ export {
   Entities,
   Geometry,
   Keys,
-  Maths,
   Maps,
+  Maths,
   Sorts,
   Tiled,
   Types,
+  Database
 };

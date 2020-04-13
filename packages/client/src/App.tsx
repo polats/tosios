@@ -9,6 +9,7 @@ import { IInternalEvent } from "@walletconnect/types";
 
 import { getAccounts, initWallet, updateWallet } from "./helpers/wallet";
 import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
+import { getDatabaseManager } from "./helpers/database";
 
 import { DEFAULT_CHAIN_ID, DEFAULT_ACTIVE_INDEX } from "./helpers/constants";
 import { getCachedSession } from "./helpers/utilities";
@@ -71,6 +72,8 @@ const DEFAULT_ACCOUNTS = CREATE_WALLET_ON_GUEST_ACCOUNT
   ? getAccounts() : [];
 const DEFAULT_ADDRESS = CREATE_WALLET_ON_GUEST_ACCOUNT
   ? DEFAULT_ACCOUNTS[DEFAULT_ACTIVE_INDEX] : "";
+
+const DATABASE = getDatabaseManager()
 
 const INITIAL_STATE: IAppState = {
   loading: false,
