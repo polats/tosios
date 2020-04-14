@@ -1,5 +1,5 @@
 import { navigate, RouteComponentProps } from '@reach/router';
-import { Constants, Types } from '@tosios/common';
+import { Constants, Types, Database } from '@tosios/common';
 import { Client } from 'colyseus.js';
 import { RoomAvailable } from 'colyseus.js/lib/Room';
 import qs from 'querystringify';
@@ -49,6 +49,7 @@ interface IState {
   roomMaxPlayers: any;
   mode: any;
   rooms: Array<RoomAvailable<any>>;
+  leaderboard: Array<Database.LeaderboardEntry>;
   timer: any;
 }
 
@@ -64,6 +65,7 @@ export default class Home extends Component<IProps, IState> {
     mode: GameModesList[0].value,
     rooms: [],
     timer: null,
+    leaderboard: null,
   };
 
   private client?: Client;
@@ -184,17 +186,30 @@ export default class Home extends Component<IProps, IState> {
         </Helmet>
 
         <View flex={true} center={true} column={true}>
-          <h1 style={{ color: 'white' }}>
-            {Constants.APP_TITLE}
-          </h1>
-          <Space size="xxs" />
-          <GitHub />
+        {
+          // <h1 style={{ color: 'white' }}>
+          //   {Constants.APP_TITLE}
+          // </h1>
+          // <Space size="xxs" />
+          // <GitHub />
+        }
         </View>
 
-        <Space size="m" />
         {
-          // this.renderName()
+        // <Space size="m" />
+          // {
+        // this.renderName()
+          // }
         }
+        <Box
+          style={{
+            width: 500,
+            maxWidth: '100%',
+          }}
+        >
+        {this.renderLeaderboard()}
+        </Box>
+
         <Space size="m" />
         {this.renderRoom()}
       </View>
@@ -354,6 +369,50 @@ export default class Home extends Component<IProps, IState> {
         )}
       </View>
     );
+  }
+
+  renderLeaderboard = () => {
+    const {
+      leaderboard,
+    } = this.state;
+
+    if (!leaderboard || !leaderboard.length) {
+      return (
+        <View
+          flex={true}
+          center={true}
+          style={{
+            borderRadius: 8,
+            backgroundColor: '#efefef',
+            color: 'darkgrey',
+            height: 128,
+          }}
+        >
+          {'No leaderboard entries yet...'}
+        </View>
+      );
+    }
+
+    // return leaderboard.map(({ roomId, metadata, clients, maxClients }, index) => {
+    //   const map = MapsList.find(item => item.value === metadata.roomMap);
+    //   const mapName = map ? map.title : metadata.roomMap;
+    //
+    //   return (
+    //     <Fragment key={roomId}>
+    //       <Room
+    //         id={roomId}
+    //         roomName={metadata.roomName}
+    //         roomMap={mapName}
+    //         clients={clients}
+    //         maxClients={maxClients}
+    //         mode={metadata.mode}
+    //         onClick={this.handleRoomClick}
+    //       />
+    //       {(index !== rooms.length - 1) && <Space size="xxs" />}
+    //     </Fragment>
+    //   );
+    // });
+    //
   }
 
   renderRooms = () => {

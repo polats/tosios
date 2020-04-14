@@ -11,7 +11,7 @@ export class OrbitDBManager {
       relay: { enabled: true, hop: { enabled: true, active: true } },
       EXPERIMENTAL: { pubsub: true },
       repo: './ipfs',
-      })
+    })
   }
 
 }
