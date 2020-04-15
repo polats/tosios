@@ -24,6 +24,8 @@ import WCButton from "./components/WCButton";
 import Game from './scenes/Game';
 import Home from './scenes/Home';
 
+import { Database } from '@tosios/common';
+
 // app settings
 const CREATE_WALLET_ON_GUEST_ACCOUNT = false;
 
@@ -41,6 +43,7 @@ const SConnectButton = styled(WCButton)`
 `;
 
 export interface IAppState {
+  playerProfile: Database.PlayerProfile;
   loading: boolean;
   scanner: boolean;
   connector: WalletConnect | null;
@@ -76,6 +79,11 @@ const DEFAULT_ADDRESS = CREATE_WALLET_ON_GUEST_ACCOUNT
 const DATABASE = getDatabaseManager()
 
 const INITIAL_STATE: IAppState = {
+  playerProfile: {
+    walletid: null,
+    username: "Guest Account",
+    dbid: null
+  },
   loading: false,
   scanner: false,
   connector: null,
@@ -291,6 +299,7 @@ class App extends React.Component<{}> {
 
   render() {
     const {
+      playerProfile,
       peerMeta,
       scanner,
       connected,
@@ -311,6 +320,7 @@ class App extends React.Component<{}> {
       <>
         <View flex={true} center={true} column={true}>
             <Header
+              playerProfile={playerProfile}
               connected={connected}
               address={address}
               chainId={chainId}

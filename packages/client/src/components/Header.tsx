@@ -4,6 +4,7 @@ import * as PropTypes from "prop-types";
 import Blockie from "./Blockie";
 import { ellipseAddress, getChainData } from "../helpers/utilities";
 import { transitions } from "../styles";
+import { Database } from "@tosios/common";
 
 const SHeader = styled.div`
   margin-top: -1px;
@@ -93,10 +94,11 @@ interface IHeaderProps {
   connected: boolean;
   address: string;
   chainId: number;
+  playerProfile: Database.PlayerProfile;
 }
 
 const Header = (props: IHeaderProps) => {
-  const { connected, address, chainId, killSession, connectSession } = props;
+  const { playerProfile, connected, address, chainId, killSession, connectSession } = props;
   const activeChain = chainId ? getChainData(chainId).name : null;
   return (
     <SHeader {...props}>
@@ -107,7 +109,7 @@ const Header = (props: IHeaderProps) => {
         </SActiveChain>
       ) : (
         <SActiveChain>
-          <p>{`Guest Account`}</p>
+          <p>{playerProfile.username}</p>
         </SActiveChain>
       )}
 
