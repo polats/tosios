@@ -3,7 +3,7 @@ import * as OrbitDB from 'orbit-db'
 
 export class OrbitDBManager {
 
-  const REPO = './ipfs'
+  REPO = './ipfs'
 
   node:any = null
 
