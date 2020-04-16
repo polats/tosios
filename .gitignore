@@ -17,6 +17,7 @@
 .env.test.local
 .env.production.local
 packages/server/ipfs
+packages/server/orbitdb
 
 
 npm-debug.log*

@@ -20,9 +20,15 @@ const server = new Server({
   express: app,
 });
 
-// database
-const db = new Database.OrbitDBManager();
-console.log(db);
+let db = null
+
+async function initializeDatabase() {
+  db = new Database.OrbitDBManager();
+  await db.start();
+  await db.initializeServerData();
+}
+
+initializeDatabase();
 
 // Game Rooms
 server.define(Constants.ROOM_NAME, GameRoom);
