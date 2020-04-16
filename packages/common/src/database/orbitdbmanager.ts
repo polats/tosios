@@ -3,14 +3,19 @@ import * as OrbitDB from 'orbit-db'
 
 export class OrbitDBManager {
 
-  node:any = {}
+  const REPO = './ipfs'
+
+  node:any = null
 
   async start() {
-    this.node = await IPFS.create({
-      relay: { enabled: true, hop: { enabled: true, active: true } },
-      EXPERIMENTAL: { pubsub: true },
-      repo: './ipfs',
-    })
+
+    if (!this.node) {
+      this.node = await IPFS.create({
+        relay: { enabled: true, hop: { enabled: true, active: true } },
+        EXPERIMENTAL: { pubsub: true },
+        repo: this.REPO,
+      })
+    }
   }
 
   async getId() {

@@ -1,6 +1,9 @@
 import { Database } from "@tosios/common";
 
- export function getDatabaseManager(): Database.OrbitDBManager {
+export async function getDatabaseManager(): Promise<Database.OrbitDBManager> {
 
-  return new Database.OrbitDBManager();
+ const dbManager = new Database.OrbitDBManager();
+ await dbManager.start();
+
+ return dbManager;
 }

@@ -44,7 +44,6 @@ const SConnectButton = styled(WCButton)`
 
 export interface IAppState {
   playerProfile: Database.PlayerProfile;
-  dbManager: Database.OrbitDBManager | null;
   loading: boolean;
   scanner: boolean;
   connector: WalletConnect | null;
@@ -83,7 +82,6 @@ const INITIAL_STATE: IAppState = {
     username: null,
     dbid: null
   },
-  dbManager: null,
   loading: false,
   scanner: false,
   connector: null,
@@ -112,13 +110,16 @@ const INITIAL_STATE: IAppState = {
 };
 
 class App extends React.Component<{}> {
+
   public state: IAppState;
+  public dbManager: Database.OrbitDBManager;
 
   constructor(props: any) {
     super(props);
     this.state = {
       ...INITIAL_STATE,
     };
+
   }
 
   public componentDidMount() {
@@ -133,7 +134,8 @@ class App extends React.Component<{}> {
     if (CREATE_WALLET_ON_GUEST_ACCOUNT)
       this.initWallet();
 
-    this.initDatabase();
+    this.updateProfile();
+
   };
 
   public killSession = () => {
@@ -145,15 +147,11 @@ class App extends React.Component<{}> {
     this.resetApp();
   };
 
-  public initDatabase = async () => {
-    // wait for database to initialize
-    const dbManager = new Database.OrbitDBManager();
-    await dbManager.start();
+  public updateProfile = async () => {
+    try {
 
-    // get the db idea
-    const id = await dbManager.getId();
+    const id = await this.dbManager.getId();
 
-    // set playerprofile state
     const playerProfile = {
       username: "Guest-" + id.substr(id.length - 4),
       dbid: id
@@ -162,6 +160,17 @@ class App extends React.Component<{}> {
     await this.setState({
       playerProfile
     })
+
+  } catch (e)
+    {
+      console.log(e)
+    }
+
+  }
+
+  public initDatabase = async () => {
+    this.dbManager = await getDatabaseManager();
+    this.updateProfile();
   }
 
   public initWallet = async () => {
