@@ -8,6 +8,9 @@ import { Helmet } from 'react-helmet';
 import { Box, Button, GitHub, IListItem, Inline, Input, Room, Select, Separator, Space, View } from '../components';
 import playerImage from '../images/textures/player/player-idle-2.png';
 
+import { Slide, ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import styled from "styled-components";
 import { colors } from "../styles";
 
@@ -34,10 +37,11 @@ const GameModesList: IListItem[] = Constants.GAME_MODES.map(value => ({
   title: value,
 }));
 
-const ALLOW_NAME_CHANGE = false;
-const ENABLE_WEB3_LOGIN = true;
+const ALLOW_NAME_CHANGE = true;
+const ENABLE_WEB3_LOGIN = false;
 
 interface IProps extends RouteComponentProps {
+  playerProfile: Database.PlayerProfile;
   connected: boolean;
 }
 
@@ -117,6 +121,8 @@ export default class Home extends Component<IProps, IState> {
     this.setState({
       hasNameChanged: false,
     });
+
+    toast.info('👋 Welcome, ' + playerName + '!');
   }
 
   handleRoomNameChange = (event: any) => {
@@ -182,6 +188,12 @@ export default class Home extends Component<IProps, IState> {
           flexDirection: 'column',
         }}
       >
+
+      <ToastContainer
+        position="bottom-right"
+        transition={ Slide }
+        pauseOnHover={ false } />
+
         <Helmet>
           <title>{Constants.APP_TITLE}</title>
         </Helmet>
@@ -196,6 +208,17 @@ export default class Home extends Component<IProps, IState> {
         }
         </View>
 
+        {
+          this.props.connected &&
+          <>
+            {
+              this.renderName()
+            }
+          </>
+        }
+
+        <Space size="m" />
+
         <Box
           style={{
             width: 500,
@@ -204,16 +227,6 @@ export default class Home extends Component<IProps, IState> {
         >
         {this.renderLeaderboard()}
         </Box>
-
-        {
-          this.props.connected &&
-          <>
-            <Space size="m" />
-            {
-              this.renderName()
-            }
-          </>
-        }
 
         <Space size="m" />
         {this.renderRoom()}
@@ -232,7 +245,7 @@ export default class Home extends Component<IProps, IState> {
         <View flex={true}>
           <img src={playerImage} alt="player" width={30} />
           <Inline size="thin" />
-          <SAccountName>Guest Account</SAccountName>
+          <SAccountName>Pick your name:</SAccountName>
         </View>
         <Space size="xs" />
 
