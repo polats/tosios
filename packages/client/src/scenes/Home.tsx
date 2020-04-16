@@ -11,6 +11,8 @@ import playerImage from '../images/textures/player/player-idle-2.png';
 import { Slide, ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { updatePlayerProfile } from "../helpers/database";
+
 import styled from "styled-components";
 import { colors } from "../styles";
 
@@ -122,7 +124,9 @@ export default class Home extends Component<IProps, IState> {
       hasNameChanged: false,
     });
 
-    toast.info('👋 Welcome, ' + playerName + '!');
+    updatePlayerProfile(this.props.playerProfile)
+
+    toast.info('👋 Nice to meet you, ' + playerName + '!');
   }
 
   handleRoomNameChange = (event: any) => {

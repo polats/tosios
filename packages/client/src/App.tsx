@@ -9,7 +9,7 @@ import { IInternalEvent } from "@walletconnect/types";
 
 import { getAccounts, initWallet, updateWallet } from "./helpers/wallet";
 import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
-import { getDatabaseManager } from "./helpers/database";
+import { getLocalDatabaseManager } from "./helpers/database";
 
 import { DEFAULT_CHAIN_ID, DEFAULT_ACTIVE_INDEX } from "./helpers/constants";
 import { getCachedSession } from "./helpers/utilities";
@@ -169,7 +169,7 @@ class App extends React.Component<{}> {
   }
 
   public initDatabase = async () => {
-    this.dbManager = await getDatabaseManager();
+    this.dbManager = await getLocalDatabaseManager();
     this.updateProfile();
   }
 

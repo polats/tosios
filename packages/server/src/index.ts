@@ -33,6 +33,14 @@ app.use(express.static(join(__dirname, 'public')));
 // If you don't want people accessing your server stats, comment this line.
 app.use('/colyseus', monitor(server));
 
+app.post('/profile', (req: any, res: any) => {
+  res.json(
+    {
+      result: true
+    }
+  );
+});
+
 // Serve the frontend client
 app.get('*', (req: any, res: any) => {
   res.sendFile(join(__dirname, 'public', 'index.html'));
