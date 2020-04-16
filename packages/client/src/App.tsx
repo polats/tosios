@@ -362,6 +362,7 @@ class App extends React.Component<{}> {
         <Router>
           <Home
             default={true}
+            connected={connected}
             path="/"
           />
           <Game

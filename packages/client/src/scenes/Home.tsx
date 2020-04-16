@@ -38,6 +38,7 @@ const ALLOW_NAME_CHANGE = false;
 const ENABLE_WEB3_LOGIN = true;
 
 interface IProps extends RouteComponentProps {
+  connected: boolean;
 }
 
 interface IState {
@@ -195,12 +196,6 @@ export default class Home extends Component<IProps, IState> {
         }
         </View>
 
-        {
-        // <Space size="m" />
-          // {
-        // this.renderName()
-          // }
-        }
         <Box
           style={{
             width: 500,
@@ -209,6 +204,16 @@ export default class Home extends Component<IProps, IState> {
         >
         {this.renderLeaderboard()}
         </Box>
+
+        {
+          this.props.connected &&
+          <>
+            <Space size="m" />
+            {
+              this.renderName()
+            }
+          </>
+        }
 
         <Space size="m" />
         {this.renderRoom()}
