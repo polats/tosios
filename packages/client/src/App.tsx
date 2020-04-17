@@ -344,13 +344,17 @@ class App extends React.Component<{}> {
 
   public getPlayerProfileFromServer = async () => {
     const { playerProfile } = this.state;
+    const walletid = playerProfile.walletid
 
-    this.setState({ fetching: true });
+    await this.setState({ fetching: true });
     try {
-      const serverPlayerProfile = await getPlayerProfile(playerProfile);
+      var serverPlayerProfile = await getPlayerProfile(playerProfile);
 
       if (serverPlayerProfile)
+      {
+        serverPlayerProfile.walletid = walletid
         await this.setState({ playerProfile: serverPlayerProfile });
+      }
     } catch (error) {
       console.error(error);
     }

@@ -26,8 +26,7 @@ export async function getLocalDatabaseManager(): Promise<Database.OrbitDBManager
 
 export async function getPlayerProfile(playerProfile: Database.PlayerProfile): Promise<any> {
   const response = await api.get('/profile?walletid=' + playerProfile.walletid);
-  const { result } = response.data;
-  return result;
+  return response.data;
 }
 
 export async function updatePlayerProfile(playerProfile: Database.PlayerProfile): Promise<any> {

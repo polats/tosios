@@ -39,12 +39,14 @@ app.use(express.static(join(__dirname, 'public')));
 // If you don't want people accessing your server stats, comment this line.
 app.use('/colyseus', monitor(server));
 
-app.post('/profile', (req: any, res: any) => {
-  res.json(req.body);
+app.post('/profile', async (req: any, res: any) => {
+  const result = await dbManager.savePlayerProfile(req.body);
+  res.json(result);
 });
 
-app.get('/profile', (req: any, res: any) => {
-  res.json(dbManager.getPlayerProfile(req.query));
+app.get('/profile', async (req: any, res: any) => {
+  const result = await dbManager.getDBPlayerProfile(req.query.walletid);
+  res.json(result);
 });
 
 // Serve the frontend client

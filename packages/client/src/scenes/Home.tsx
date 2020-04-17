@@ -48,6 +48,7 @@ interface IProps extends RouteComponentProps {
 }
 
 interface IState {
+  newPlayerName: string;
   playerName: string;
   hasNameChanged: boolean;
   isNewRoom: boolean;
@@ -63,7 +64,8 @@ interface IState {
 export default class Home extends Component<IProps, IState> {
 
   public state: IState = {
-    playerName: localStorage.getItem('playerName') || '',
+    newPlayerName: null,
+    playerName: '',
     hasNameChanged: false,
     isNewRoom: false,
     roomName: localStorage.getItem('roomName') || '',
@@ -115,16 +117,23 @@ export default class Home extends Component<IProps, IState> {
       playerName: event.target.value,
       hasNameChanged: true,
     });
+
   }
 
   handleNameSave = () => {
     const { playerName } = this.state;
-    localStorage.setItem('playerName', playerName);
+    // localStorage.setItem('playerName', playerName);
+
+    this.props.playerProfile.username = playerName;
+
+    updatePlayerProfile(this.props.playerProfile)
+
     this.setState({
+      newPlayerName: playerName,
+      playerName: '',
       hasNameChanged: false,
     });
 
-    updatePlayerProfile(this.props.playerProfile)
 
     toast.info('👋 Nice to meet you, ' + playerName + '!');
   }
@@ -255,8 +264,8 @@ export default class Home extends Component<IProps, IState> {
 
         {ALLOW_NAME_CHANGE && (
           <Input
-            value={this.props.playerProfile ? this.props.playerProfile.username : ""}
-            placeholder="Name"
+            value={this.state.playerName}
+            placeholder={this.state.newPlayerName ? this.state.newPlayerName : this.props.playerProfile.username}
             maxLength={Constants.PLAYER_NAME_MAX}
             onChange={this.handlePlayerNameChange}
           />

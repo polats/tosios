@@ -1,6 +1,6 @@
 import * as IPFS from 'ipfs'
 const OrbitDB = require('orbit-db')
-import { PlayerProfile } from './playerProfile'
+import { PlayerProfile } from './playerprofile'
 
 export class OrbitDBManager {
 
@@ -41,17 +41,21 @@ export class OrbitDBManager {
     await this.user.load()
   }
 
-  async getPlayerProfile(walletid: any) {
+  async getDBPlayerProfile(walletid: any) {
 
-    const dbPlayerProfile = this.user.get(walletid)
+    const dbPlayerProfile = await this.user.get(walletid)
 
     return dbPlayerProfile
   }
 
   async savePlayerProfile(playerProfile: PlayerProfile) {
+
     const id = playerProfile.walletid;
     delete playerProfile.walletid;
-    return this.user.set(playerProfile.walletid, playerProfile)
+
+    const result = await this.user.set(id, playerProfile)
+
+    return result
   }
 
   async getId() {
