@@ -255,7 +255,7 @@ export default class Home extends Component<IProps, IState> {
 
         {ALLOW_NAME_CHANGE && (
           <Input
-            value={this.state.playerName}
+            value={this.props.playerProfile ? this.props.playerProfile.username : ""}
             placeholder="Name"
             maxLength={Constants.PLAYER_NAME_MAX}
             onChange={this.handlePlayerNameChange}

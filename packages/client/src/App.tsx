@@ -9,7 +9,7 @@ import { IInternalEvent } from "@walletconnect/types";
 
 import { getAccounts, initWallet, updateWallet } from "./helpers/wallet";
 import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
-import { getLocalDatabaseManager } from "./helpers/database";
+import { getLocalDatabaseManager, getPlayerProfile } from "./helpers/database";
 
 import { DEFAULT_CHAIN_ID, DEFAULT_ACTIVE_INDEX } from "./helpers/constants";
 import { getCachedSession } from "./helpers/utilities";
@@ -277,15 +277,22 @@ class App extends React.Component<{}> {
       this.onDisconnect();
     });
 
+    // if already connected, initialize the profile
     if (connector.connected) {
       const { chainId, accounts } = connector;
       const address = accounts[0];
+      const { playerProfile } = this.state
+      playerProfile.walletid = address;
+
       this.setState({
         connected: true,
+        playerProfile,
         chainId,
         accounts,
         address,
       });
+
+    this.getPlayerProfileFromServer();
     }
 
     this.setState({ connector });
@@ -294,14 +301,20 @@ class App extends React.Component<{}> {
   public onConnect = async (payload: IInternalEvent) => {
     const { chainId, accounts } = payload.params[0];
     const address = accounts[0];
+
+    const { playerProfile } = this.state;
+    playerProfile.walletid = address;
+
     await this.setState({
       connected: true,
+      playerProfile,
       chainId,
       accounts,
       address,
     });
     WalletConnectQRCodeModal.close();
-    this.getAccountAssets();
+    // this.getAccountAssets();
+    this.getPlayerProfileFromServer();
   };
 
   public onDisconnect = async () => {
@@ -328,6 +341,21 @@ class App extends React.Component<{}> {
       await this.setState({ fetching: false });
     }
   };
+
+  public getPlayerProfileFromServer = async () => {
+    const { playerProfile } = this.state;
+
+    this.setState({ fetching: true });
+    try {
+      const serverPlayerProfile = await getPlayerProfile(playerProfile);
+
+      if (serverPlayerProfile)
+        await this.setState({ playerProfile: serverPlayerProfile });
+    } catch (error) {
+      console.error(error);
+    }
+    await this.setState({ fetching: false });
+  }
 
   render() {
     const {

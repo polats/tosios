@@ -1,5 +1,6 @@
 import * as IPFS from 'ipfs'
 const OrbitDB = require('orbit-db')
+import { PlayerProfile } from './playerProfile'
 
 export class OrbitDBManager {
 
@@ -38,13 +39,19 @@ export class OrbitDBManager {
   async initializeServerData() {
     this.user = await this.orbitdb.kvstore('user', this.defaultOptions)
     await this.user.load()
-    await this.loadFixtureData(
-      {
-        'username': 'Test',
-        'dbid': '112345'
-      }
-    )
-    console.log(this.user.all)
+  }
+
+  async getPlayerProfile(walletid: any) {
+
+    const dbPlayerProfile = this.user.get(walletid)
+
+    return dbPlayerProfile
+  }
+
+  async savePlayerProfile(playerProfile: PlayerProfile) {
+    const id = playerProfile.walletid;
+    delete playerProfile.walletid;
+    return this.user.set(playerProfile.walletid, playerProfile)
   }
 
   async getId() {

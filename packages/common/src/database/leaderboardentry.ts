@@ -1,4 +1,4 @@
 export interface LeaderboardEntry {
-  user: string;
+  username: string;
   score: number;
 }

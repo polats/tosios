@@ -20,12 +20,12 @@ const server = new Server({
   express: app,
 });
 
-let db = null
+let dbManager = null
 
 async function initializeDatabase() {
-  db = new Database.OrbitDBManager();
-  await db.start();
-  await db.initializeServerData();
+  dbManager = new Database.OrbitDBManager();
+  await dbManager.start();
+  await dbManager.initializeServerData();
 }
 
 initializeDatabase();
@@ -40,11 +40,11 @@ app.use(express.static(join(__dirname, 'public')));
 app.use('/colyseus', monitor(server));
 
 app.post('/profile', (req: any, res: any) => {
-  res.json(
-    {
-      result: true
-    }
-  );
+  res.json(req.body);
+});
+
+app.get('/profile', (req: any, res: any) => {
+  res.json(dbManager.getPlayerProfile(req.query));
 });
 
 // Serve the frontend client
