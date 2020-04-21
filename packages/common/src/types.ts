@@ -1,6 +1,6 @@
 export type ActionType = 'move' | 'rotate' | 'name' | 'shoot';
 export type GameState = 'waiting' | 'lobby' | 'game';
-export type GameMode = 'deathmatch' | 'team deathmatch';
+export type GameMode = 'score attack' | 'deathmatch' | 'team deathmatch';
 export type Teams = 'Red' | 'Blue';
 export type MessageType = 'waiting' | 'start' | 'stop' | 'joined' | 'killed' | 'won' | 'left' | 'timeout';
 export type PropType = 'potion-red';

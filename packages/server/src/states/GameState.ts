@@ -97,7 +97,7 @@ export class GameState extends Schema {
   }
 
   private updateGame() {
-    this.game.update(this.players);
+    this.game.update(this.players, this.monsters);
   }
 
   private updatePlayers() {

@@ -2,6 +2,7 @@ import { MapSchema, Schema, type } from '@colyseus/schema';
 import { Constants, Types } from '@tosios/common';
 import { Message } from '.';
 import { Player } from './Player';
+import { Monster } from './Monster';
 
 export interface IGame {
   mapName: string;
@@ -54,7 +55,7 @@ export class Game extends Schema {
   }
 
   // Update
-  update(players: MapSchema<Player>) {
+  update(players: MapSchema<Player>, monsters:MapSchema<Monster>) {
     switch (this.state) {
       case 'waiting':
         this.updateWaiting(players);
@@ -63,14 +64,14 @@ export class Game extends Schema {
         this.updateLobby(players);
         break;
       case 'game':
-        this.updateGame(players);
+        this.updateGame(players, monsters);
         break;
     }
   }
 
   updateWaiting(players: MapSchema<Player>) {
     // If there are two players, the game starts.
-    if (countPlayers(players) > 1) {
+    if (countPlayers(players) === 1) {
       this.startLobby();
       return;
     }
@@ -78,7 +79,7 @@ export class Game extends Schema {
 
   updateLobby(players: MapSchema<Player>) {
     // If a player is alone, the game stops.
-    if (countPlayers(players) === 1) {
+    if (countPlayers(players) === 0) {
       this.startWaiting();
       return;
     }
@@ -90,13 +91,13 @@ export class Game extends Schema {
     }
   }
 
-  updateGame(players: MapSchema<Player>) {
+  updateGame(players: MapSchema<Player>, monsters: MapSchema<Monster>) {
     // If a player is alone, the game stops.
-    if (countPlayers(players) === 1) {
-      this.onGameEnd();
-      this.startWaiting();
-      return;
-    }
+    // if (countPlayers(players) === 1) {
+    //   this.onGameEnd();
+    //   this.startWaiting();
+    //   return;
+    // }
 
     // If the time is out, the game stops.
     if (this.gameEndsAt < Date.now()) {
@@ -129,6 +130,21 @@ export class Game extends Schema {
       if (team) {
         const message = new Message('won', {
           name: team === 'Red' ? 'Red team' : 'Blue team',
+        });
+        this.onGameEnd(message);
+        this.startLobby();
+
+        return;
+      }
+    }
+
+    // Score Attack
+    if (this.mode === 'score attack' && countActiveMonsters(monsters) === 0) {
+      // Check to see if only one player is alive
+      const player: Player | null = getWinningPlayer(players);
+      if (player) {
+        const message = new Message('won', {
+          name: player.name,
         });
         this.onGameEnd(message);
         this.startLobby();
@@ -180,6 +196,19 @@ function countActivePlayers(players: MapSchema<Player>) {
 
   return count;
 }
+
+function countActiveMonsters(monsters: MapSchema<Monster>) {
+  let count = 0;
+  for (const monsterid in monsters) {
+    if (monsters[monsterid].isAlive) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+
 
 function getWinningPlayer(players: MapSchema<Player>): Player | null {
   for (const playerId in players) {
