@@ -31,7 +31,7 @@ const MapsList: IListItem[] = Constants.MAPS_NAMES.map(value => ({
 
 const PlayersCountList: IListItem[] = Constants.ROOM_PLAYERS_SCALES.map(value => ({
   value,
-  title: `${value} players`,
+  title:  `${value} ` + ((value === 1) ? `player` : `players`),
 }));
 
 const GameModesList: IListItem[] = Constants.GAME_MODES.map(value => ({
@@ -152,12 +152,13 @@ export default class Home extends Component<IProps, IState> {
 
   handleCreateRoomClick = () => {
     const {
-      playerName,
       roomName,
       roomMap,
       roomMaxPlayers,
       mode,
     } = this.state;
+
+    const playerName = this.props.playerProfile.username
 
     const options: Types.IRoomOptions = {
       playerName,
