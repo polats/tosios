@@ -48,6 +48,13 @@ export class OrbitDBManager {
     return dbPlayerProfile
   }
 
+  async getLeaderboard() {
+
+    const lb = await this.user.all
+
+    return lb
+  }
+
   async savePlayerProfile(playerProfile: PlayerProfile) {
 
     const id = playerProfile.walletid;

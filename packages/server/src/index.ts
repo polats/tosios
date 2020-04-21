@@ -49,6 +49,11 @@ app.get('/profile', async (req: any, res: any) => {
   res.json(result);
 });
 
+app.get('/leaderboard', async (req: any, res: any) => {
+  const result = await dbManager.getLeaderboard();
+  res.json(result);
+});
+
 // Serve the frontend client
 app.get('*', (req: any, res: any) => {
   res.sendFile(join(__dirname, 'public', 'index.html'));
