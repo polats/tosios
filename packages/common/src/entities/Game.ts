@@ -1,5 +1,5 @@
 import { MapSchema, Schema, type } from '@colyseus/schema';
-import { Constants, Types } from '@tosios/common';
+import { Constants, Types } from '..';
 import { Message } from '.';
 import { Player } from './Player';
 import { Monster } from './Monster';

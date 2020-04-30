@@ -11,9 +11,12 @@
       "es2015.iterable"
     ],
     "target": "es2015",
-    "strict": true,
+    "strict": false,
     "declaration": true,
     "jsx": "react",
-    "sourceMap": true
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
   }
 }

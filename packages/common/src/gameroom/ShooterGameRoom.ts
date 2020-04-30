@@ -1,9 +1,9 @@
-import { Constants, Maths, Types } from '@tosios/common';
 import { Client, Room } from 'colyseus';
+import { Constants, Maths, Types } from '..';
 import { Message } from '../entities/Message';
 import { GameState } from '../states/GameState';
 
-export class GameRoom extends Room<GameState> {
+export class ShooterGameRoom extends Room<GameState> {
 
   // LIFECYCLE
   onCreate(options: Types.IRoomOptions) {
@@ -33,33 +33,33 @@ export class GameRoom extends Room<GameState> {
 
     this.setSimulationInterval(() => this.handleTick());
 
+    this.onMessage('*', (client: Client, data: any) => {
+      const playerId = client.sessionId;
+      const type: Types.ActionType = data.type;
+
+      // Validate which type of message is accepted
+      switch (type) {
+        case 'name':
+        case 'move':
+        case 'rotate':
+        case 'shoot':
+          this.state.playerPushAction({
+            playerId,
+            ...data,
+            ts: Date.now(),
+          });
+          break;
+        default:
+          break;
+      }
+    });
+
     console.log('Room created', options);
   }
 
   onJoin(client: Client, options: Types.IPlayerOptions) {
     this.state.playerAdd(client.sessionId, options.playerName);
     console.log(`Player joined: id=${client.sessionId} name=${options.playerName}`);
-  }
-
-  onMessage(client: Client, data: any) {
-    const playerId = client.sessionId;
-    const type: Types.ActionType = data.type;
-
-    // Validate which type of message is accepted
-    switch (type) {
-      case 'name':
-      case 'move':
-      case 'rotate':
-      case 'shoot':
-        this.state.playerPushAction({
-          playerId,
-          ...data,
-          ts: Date.now(),
-        });
-        break;
-      default:
-        break;
-    }
   }
 
   onLeave(client: Client) {
@@ -77,7 +77,7 @@ export class GameRoom extends Room<GameState> {
     this.state.update();
   }
 
-  handleMessage = (message: Message) => {
-    this.broadcast(message.JSON);
+  handleMessage = (message: any) => {
+    console.log(message);
   }
 }

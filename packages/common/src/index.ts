@@ -9,6 +9,7 @@ import * as Sorts from './sort';
 import * as Tiled from './tiled';
 import * as Types from './types';
 import * as Database from './database';
+import * as GameRoom from './gameroom';
 
 export {
   Collisions,
@@ -21,5 +22,6 @@ export {
   Sorts,
   Tiled,
   Types,
-  Database
+  Database,
+  GameRoom
 };

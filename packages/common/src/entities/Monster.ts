@@ -1,7 +1,5 @@
 import { MapSchema, type } from '@colyseus/schema';
-import { Maths } from '@tosios/common';
-import { Constants } from '@tosios/common/';
-import { getDistance } from '@tosios/common/build/maths';
+import { Maths, Constants } from '..';
 import { Player } from '.';
 import { Circle } from './Circle';
 
@@ -105,7 +103,7 @@ export class Monster extends Circle {
     }
 
     // Did player run away?
-    const distance = getDistance(this.x, this.y, player.x, player.y);
+    const distance = Maths.getDistance(this.x, this.y, player.x, player.y);
     if (distance > Constants.MONSTER_SIGHT) {
       this.startIdle();
       return;

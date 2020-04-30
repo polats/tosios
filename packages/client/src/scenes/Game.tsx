@@ -119,7 +119,7 @@ export default class Game extends Component<IProps, IState> {
     this.room.state.bullets.onRemove = this.handleBulletRemove;
 
     // Listen for Messages
-    this.room.onMessage(this.handleMessage);
+    this.room.onMessage("*", this.handleMessage);
 
     // Start game
     this.gameManager.start(this.gameCanvas.current);
@@ -247,7 +247,7 @@ export default class Game extends Component<IProps, IState> {
       return;
     }
 
-    this.room.send(action);
+    this.room.send("action", action);
   }
 
 

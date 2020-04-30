@@ -1,5 +1,5 @@
 import { Schema, type } from '@colyseus/schema';
-import { Geometry } from '@tosios/common';
+import { Geometry } from '..';
 
 export class Circle extends Schema {
 

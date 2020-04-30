@@ -1,12 +1,22 @@
 import { monitor } from '@colyseus/monitor';
-import { Constants , Database } from '@tosios/common';
+import { Constants , Database, GameRoom } from '@tosios/common';
 import { Server } from 'colyseus';
 import * as cors from 'cors';
 import * as express from 'express';
 import { createServer } from 'http';
+import * as basicAuth from "express-basic-auth";
 
 import { join } from 'path';
-import { GameRoom } from './rooms/GameRoom';
+
+const basicAuthMiddleware = basicAuth({
+    // list of users and passwords
+    users: {
+        "admin": "admin",
+    },
+    // sends WWW-Authenticate header, which will prompt the user to fill
+    // credentials in
+    challenge: true
+});
 
 const PORT = Number(process.env.PORT || Constants.WS_PORT);
 
@@ -31,13 +41,13 @@ async function initializeDatabase() {
 initializeDatabase();
 
 // Game Rooms
-server.define(Constants.ROOM_NAME, GameRoom);
+server.define(Constants.ROOM_NAME, GameRoom.ShooterGameRoom);
 
 // Serve static resources from the "public" folder
 app.use(express.static(join(__dirname, 'public')));
 
 // If you don't want people accessing your server stats, comment this line.
-app.use('/colyseus', monitor(server));
+app.use("/colyseus", basicAuthMiddleware, monitor());
 
 app.post('/profile', async (req: any, res: any) => {
   const result = await dbManager.savePlayerProfile(req.body);

@@ -1,5 +1,5 @@
 import { type } from '@colyseus/schema';
-import { Maths, Types } from '@tosios/common';
+import { Maths, Types } from '..';
 import { Circle } from './Circle';
 
 const validateName = (name: string) => name.trim().slice(0, 16);

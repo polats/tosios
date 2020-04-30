@@ -1,4 +1,4 @@
-import { Types } from '@tosios/common';
+import { Types } from '..';
 
 export class Message {
 

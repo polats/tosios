@@ -1,5 +1,5 @@
 import { ArraySchema, MapSchema, Schema, type } from '@colyseus/schema';
-import { Collisions, Constants, Entities, Geometry, Maps, Maths, Tiled, Types } from '@tosios/common';
+import { Collisions, Constants, Entities, Geometry, Maps, Maths, Tiled, Types } from '..';
 import { Bullet, Game, Message, Monster, Player, Prop } from '../entities';
 
 export class GameState extends Schema {
