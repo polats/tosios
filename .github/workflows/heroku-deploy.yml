@@ -20,6 +20,23 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           PYTHON: /usr/bin/python
 
+      - name: Use Python Buildpack
+        uses: polats/heroku@master
+        with:
+          args: buildpacks:set heroku/python
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          PYTHON: /usr/bin/python
+
+      - name: Use Nodejs Buildpack
+        uses: polats/heroku@master
+        with:
+          args: buildpacks:set heroku/nodejs
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          PYTHON: /usr/bin/python
+
+
       - name: Push to Heroku
         uses: polats/heroku@master
         with:
