@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Log in Heroku
-        uses: sjdonado/heroku@master
+        uses: polats/heroku@master
         with:
           args: container:login
         env:
