@@ -20,14 +20,14 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: Push to Heroku
-        uses: sjdonado/heroku@master
+        uses: polats/heroku@master
         with:
           args: container:push -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
       - name: Release in Heroku
-        uses: sjdonado/heroku@master
+        uses: polats/heroku@master
         with:
           args: container:release -a tosios-1 web
         env:
