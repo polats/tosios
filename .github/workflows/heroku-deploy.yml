@@ -13,41 +13,22 @@ jobs:
         uses: actions/checkout@master
 
       - name: Log in Heroku
-        uses: polats/heroku@master
+        uses: sjdonado/heroku@master
         with:
           args: container:login
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
-          PYTHON_BIN: /usr/bin/python
-          PYTHON_PATH: /usr/bin/python
-
-      - name: Set Python Config
-        uses: polats/heroku@master
-        with:
-          args: config:set -a opg-demo PYTHON=/usr/bin/python
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
-          PYTHON_BIN: /usr/bin/python
-          PYTHON_PATH: /usr/bin/python
 
       - name: Push to Heroku
-        uses: polats/heroku@master
+        uses: sjdonado/heroku@master
         with:
-          args: container:push -a opg-demo web
+          args: container:push -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
-          PYTHON_BIN: /usr/bin/python
-          PYTHON_PATH: /usr/bin/python
 
       - name: Release in Heroku
-        uses: polats/heroku@master
+        uses: sjdonado/heroku@master
         with:
-          args: container:release -a opg-demo web
+          args: container:release -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
-          PYTHON_BIN: /usr/bin/python
-          PYTHON_PATH: /usr/bin/python
