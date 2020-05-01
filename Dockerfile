@@ -1,6 +1,15 @@
-FROM nikolaik/python-nodejs:python3.7-nodejs10-alpine
+FROM node:10.16.3-alpine
 
 WORKDIR /usr/src/app
+
+# --no-cache: download package index on-the-fly, no need to cleanup afterwards
+# --virtual: bundle packages, remove whole bundle at once, when done
+RUN apk --no-cache --virtual build-dependencies add \
+    python \
+    make \
+    g++ \
+    && npm install \
+    && apk del build-dependencies
 
 # Dependencies
 COPY ./package.json .
