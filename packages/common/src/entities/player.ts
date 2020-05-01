@@ -1,6 +1,6 @@
 import { type } from '@colyseus/schema';
 import { Maths, Types } from '..';
-import { Circle } from './Circle';
+import { Circle } from './circle';
 
 const validateName = (name: string) => name.trim().slice(0, 16);
 const getTeamColor = (team: Types.Teams) => team === 'Blue' ? '#0000FF' : '#FF0000';

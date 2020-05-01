@@ -1,6 +1,6 @@
 import { type } from '@colyseus/schema';
 import { Types } from '..';
-import { Rectangle } from './Rectangle';
+import { Rectangle } from './rectangle';
 
 export class Prop extends Rectangle {
 

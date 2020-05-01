@@ -1,5 +1,5 @@
 import { type } from '@colyseus/schema';
-import { Circle } from './Circle';
+import { Circle } from './circle';
 
 export class Bullet extends Circle {
 

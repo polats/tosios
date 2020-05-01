@@ -1,7 +1,7 @@
 import { MapSchema, type } from '@colyseus/schema';
 import { Maths, Constants } from '..';
 import { Player } from '.';
-import { Circle } from './Circle';
+import { Circle } from './circle';
 
 type State = 'idle' | 'patrol' | 'chase';
 

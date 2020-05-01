@@ -1,8 +1,8 @@
 import { MapSchema, Schema, type } from '@colyseus/schema';
 import { Constants, Types } from '..';
 import { Message } from '.';
-import { Player } from './Player';
-import { Monster } from './Monster';
+import { Player } from './player';
+import { Monster } from './monster';
 
 export interface IGame {
   mapName: string;
