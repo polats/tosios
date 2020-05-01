@@ -1,12 +1,12 @@
-import { Bullet } from './Bullet';
-import { Circle } from './Circle';
-import { Game } from './Game';
-import { Message } from './Message';
-import { Monster } from './Monster';
-import { Player } from './Player';
-import { Prop } from './Prop';
-import { Rectangle } from './Rectangle';
-import { Map } from './Map';
+import { Bullet } from './bullet';
+import { Circle } from './circle';
+import { Game } from './game';
+import { Message } from './message';
+import { Monster } from './monster';
+import { Player } from './player';
+import { Prop } from './prop';
+import { Rectangle } from './rectangle';
+import { Map } from './map';
 
 export {
   Bullet,
