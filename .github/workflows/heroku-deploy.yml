@@ -22,6 +22,16 @@ jobs:
           PYTHON_BIN: /usr/bin/python
           PYTHON_PATH: /usr/bin/python
 
+      - name: Set Python Config
+        uses: polats/heroku@master
+        with:
+          args: config:set PYTHON=/usr/bin/python
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          PYTHON: /usr/bin/python
+          PYTHON_BIN: /usr/bin/python
+          PYTHON_PATH: /usr/bin/python
+
       - name: Push to Heroku
         uses: polats/heroku@master
         with:
