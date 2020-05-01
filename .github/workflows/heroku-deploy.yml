@@ -25,7 +25,7 @@ jobs:
       - name: Set Python Config
         uses: polats/heroku@master
         with:
-          args: config:set PYTHON=/usr/bin/python
+          args: config:set -a opg-demo PYTHON=/usr/bin/python
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           PYTHON: /usr/bin/python
