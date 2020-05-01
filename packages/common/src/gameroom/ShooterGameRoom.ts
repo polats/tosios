@@ -1,6 +1,6 @@
 import { Client, Room } from 'colyseus';
 import { Constants, Maths, Types } from '..';
-import { Message } from '../entities/Message';
+import { Message } from '../entities/message';
 import { GameState } from '../states/GameState';
 
 export class ShooterGameRoom extends Room<GameState> {
