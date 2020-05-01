@@ -33,7 +33,7 @@ export class ShooterGameRoom extends Room<GameState> {
 
     this.setSimulationInterval(() => this.handleTick());
 
-    this.onMessage('*', (client: Client, data: any) => {
+    this.onMessage('action', (client: Client, data: any) => {
       const playerId = client.sessionId;
       const type: Types.ActionType = data.type;
 
@@ -78,6 +78,6 @@ export class ShooterGameRoom extends Room<GameState> {
   }
 
   handleMessage = (message: any) => {
-    console.log(message);
+    this.broadcast(message.type, message);
   }
 }

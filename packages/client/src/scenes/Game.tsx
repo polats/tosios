@@ -206,7 +206,7 @@ export default class Game extends Component<IProps, IState> {
     this.gameManager.bulletRemove(bulletId);
   }
 
-  handleMessage = (message: any) => {
+  handleMessage = (type: any, message: any) => {
     switch (message.type) {
       case 'waiting':
         this.gameManager.hudLogAdd(`Waiting for other players...`);
@@ -242,7 +242,7 @@ export default class Game extends Component<IProps, IState> {
 
 
   // HANDLERS: GameManager
-  handleActionSend = (action: Types.IAction) => {
+  handleActionSend = (action: any) => {
     if (!this.room) {
       return;
     }
