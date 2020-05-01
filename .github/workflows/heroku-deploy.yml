@@ -23,7 +23,7 @@ jobs:
       - name: Push to Heroku
         uses: polats/heroku@master
         with:
-          args: container:push -a tosios-1 web
+          args: container:push -a opg-demo web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           PYTHON: /usr/bin/python
@@ -31,7 +31,7 @@ jobs:
       - name: Release in Heroku
         uses: polats/heroku@master
         with:
-          args: container:release -a tosios-1 web
+          args: container:release -a opg-demo web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           PYTHON: /usr/bin/python
