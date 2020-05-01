@@ -18,7 +18,6 @@ jobs:
           args: container:login
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
 
       - name: Push to Heroku
         uses: sjdonado/heroku@master
@@ -26,7 +25,6 @@ jobs:
           args: container:push -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
 
       - name: Release in Heroku
         uses: sjdonado/heroku@master
@@ -34,4 +32,3 @@ jobs:
           args: container:release -a tosios-1 web
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          PYTHON: /usr/bin/python
